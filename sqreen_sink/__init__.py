@@ -1,9 +1,14 @@
 import os
+from logging.config import dictConfig
 
-from flask import Flask
+from flask import jsonify, Flask
+from flask_mail import Mail
 
-from .config import DevelopmentConfig, ProductionConfig
-from .utils import exception_handler
+from .config import DevelopmentConfig, ProductionConfig, LOGGING
+from .exceptions import exception_handler
+
+
+mail = Mail()
 
 
 def create_app(config_filename=None):
@@ -21,6 +26,19 @@ def create_app(config_filename=None):
     else:
         raise Exception("FLASK_SETTINGS_ENV not properly configured")
 
+    # LOGGING
+    # ------------------------------------------------------
+    dictConfig(LOGGING)
+
+    # FLASK MAIL
+    # ------------------------------------------------------
+    mail.init_app(app)
+
+    # home route
+    @app.route("/")
+    def home():
+        return jsonify({"app": __name__})
+
     # EXCEPTION HANDLER
     # ------------------------------------------------------
     @app.errorhandler(Exception)
@@ -30,6 +48,6 @@ def create_app(config_filename=None):
     # REGISTER ROUTES
     # ------------------------------------------------------
     from .api.routes import api
-    api.init(app)
+    api.init_app(app)
 
     return app
