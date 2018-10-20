@@ -267,9 +267,11 @@ tags
 
 ### Project template
 
-namak_warehouses/media/
-
 .pytest_cache/
 .env
 .envs/*
 !.envs/.local/
+
+
+### Ignore stored json files
+sqreen_sink/notifications_filestore/*.json
