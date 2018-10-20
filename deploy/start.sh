@@ -4,4 +4,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-exec gunicorn --config gunicorn_config.py sqreen_sink
+sqreen-start gunicorn 'sqreen_sink:create_app()' \
+    --config='gunicorn_config.py' \
+	--log-config='gunicorn_logging.conf'
+
