@@ -8,6 +8,8 @@ from .config import DevelopmentConfig, ProductionConfig, LOGGING
 from .exceptions import exception_handler
 
 
+__version__ = "0.0.1"
+
 mail = Mail()
 
 
@@ -34,10 +36,13 @@ def create_app(config_filename=None):
     # ------------------------------------------------------
     mail.init_app(app)
 
-    # home route
+    # ROOT
     @app.route("/")
-    def home():
-        return jsonify({"app": __name__})
+    def root():
+        return jsonify({
+            "app": __name__,
+            "version": __version__
+        })
 
     # EXCEPTION HANDLER
     # ------------------------------------------------------
