@@ -25,6 +25,7 @@ class SqreenWebhook(Resource):
         self._verify_signature()
 
         # TODO: Send this to an async task manager instead
+        # Sqreen seems to have a timeout for the registration of webhook
         dispatch = self._dispatch(request)
 
         return jsonify(dispatch)

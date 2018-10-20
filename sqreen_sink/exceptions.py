@@ -44,7 +44,7 @@ def exception_handler(exc):
     response.status_code = status_code
 
     # if DEBUG, log exception
-    if not current_app.debug:
+    if current_app.debug:
         logger.exception(exc)
 
     return response
