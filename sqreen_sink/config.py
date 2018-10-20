@@ -4,8 +4,6 @@ import os
 class BaseConfig(object):
 
     # FLASK CONFIG
-    # This needs to be set in order to trigger the error handlers
-    # PROPAGATE_EXCEPTIONS = True
 
     # FLASK MAIL
     MAIL_SERVER = os.environ.get('MAIL_SERVER', default='smtp.gmail.com')
@@ -13,7 +11,7 @@ class BaseConfig(object):
     MAIL_USE_SSL = True
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SERVER', default="do_not_reply@sqreen_sink.com")
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME', default='fahyik.sqreen@gmail.com')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', default='sqreen-fahyik')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', default='password')
 
     # SQREEN
     SQREEN_WEBHOOK_SECRET = os.environ.get('SQREEN_WEBHOOK_SECRET', default='1234')
@@ -29,8 +27,8 @@ class DevelopmentConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-
-    pass
+    # This needs to be set in order to trigger the error handlers
+    PROPAGATE_EXCEPTIONS = True
 
 
 LOGGING = {

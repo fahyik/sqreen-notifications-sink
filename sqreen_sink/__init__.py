@@ -17,14 +17,14 @@ def create_app(config_filename=None):
     # ------------------------------------------------------
     app = Flask(__name__)
 
-    env = os.environ.get('FLASK_SETTINGS_ENV', default="development")
+    env = os.environ.get('FLASK_ENV', default="development")
 
     if env == "development":
         app.config.from_object(DevelopmentConfig)
     elif env == "production":
         app.config.from_object(ProductionConfig)
     else:
-        raise Exception("FLASK_SETTINGS_ENV not properly configured")
+        raise Exception("FLASK_ENV not properly configured")
 
     # LOGGING
     # ------------------------------------------------------
