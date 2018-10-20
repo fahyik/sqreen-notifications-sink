@@ -27,7 +27,7 @@ class SqreenWebhook(Resource):
         # TODO: Send this to an async task manager instead
         dispatch = self._dispatch(request)
 
-        return jsonify({dispatch})
+        return jsonify(dispatch)
 
     def _dispatch(self, request):
 
