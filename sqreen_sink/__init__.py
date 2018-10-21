@@ -8,7 +8,7 @@ from .config import DevelopmentConfig, ProductionConfig, LOGGING
 from .exceptions import exception_handler
 
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 mail = Mail()
 
