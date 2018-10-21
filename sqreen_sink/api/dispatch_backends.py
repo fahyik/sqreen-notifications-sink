@@ -9,7 +9,7 @@ import pytz
 from flask import current_app
 from flask_mail import Message
 
-from . import mail
+from .. import mail
 
 logger = logging.getLogger(__name__)
 

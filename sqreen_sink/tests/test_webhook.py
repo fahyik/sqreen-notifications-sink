@@ -23,17 +23,17 @@ class TestWebhook():
     def test_webhook_success(self, client, monkeypatch):
 
         monkeypatch.setattr(
-            'sqreen_sink.dispatch_backends.FileBackend.dispatch',
+            'sqreen_sink.api.dispatch_backends.FileBackend.dispatch',
             lambda *args: True
         )
 
         monkeypatch.setattr(
-            'sqreen_sink.dispatch_backends.MailBackend.dispatch',
+            'sqreen_sink.api.dispatch_backends.MailBackend.dispatch',
             lambda *args: True
         )
 
         monkeypatch.setattr(
-            'sqreen_sink.dispatch_backends.LogBackend.dispatch',
+            'sqreen_sink.api.dispatch_backends.LogBackend.dispatch',
             lambda *args: True
         )
 

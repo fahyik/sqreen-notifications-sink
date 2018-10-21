@@ -1,7 +1,7 @@
 import mock
 import os
 
-from ..dispatch_backends import MailBackend, LogBackend, FileBackend
+from ..api.dispatch_backends import MailBackend, LogBackend, FileBackend
 
 
 class TestFileBackend():
@@ -20,7 +20,7 @@ class TestFileBackend():
         os.remove(test_path_to_file)
 
     @mock.patch.object(FileBackend, '_write_to_file', mock.Mock(side_effect=Exception))
-    @mock.patch('sqreen_sink.dispatch_backends.logger.fatal')
+    @mock.patch('sqreen_sink.api.dispatch_backends.logger.fatal')
     def test_write_fail(self, mock_logger):
 
         assert not FileBackend(mock.Mock()).dispatch()
@@ -30,14 +30,14 @@ class TestFileBackend():
 
 class TestLogBackend():
 
-    @mock.patch('sqreen_sink.dispatch_backends.logger.info')
+    @mock.patch('sqreen_sink.api.dispatch_backends.logger.info')
     def test_log_to_console(self, console_logger, mock_webhook_request):
 
         assert LogBackend(mock_webhook_request).dispatch()
         console_logger.assert_called_once()
 
-    @mock.patch('sqreen_sink.dispatch_backends.logger.info', mock.Mock(side_effect=Exception))
-    @mock.patch('sqreen_sink.dispatch_backends.logger.fatal')
+    @mock.patch('sqreen_sink.api.dispatch_backends.logger.info', mock.Mock(side_effect=Exception))
+    @mock.patch('sqreen_sink.api.dispatch_backends.logger.fatal')
     def test_log_to_console_fail(self, mock_logger):
 
         assert not LogBackend(mock.Mock()).dispatch()
@@ -67,7 +67,7 @@ class TestMailBackend():
                 assert outbox[0].recipients == app.config.get('DISPATCH_MAIL_RECIPIENTS')
 
     @mock.patch.object(MailBackend, '_send_mail', mock.Mock(side_effect=Exception))
-    @mock.patch('sqreen_sink.dispatch_backends.logger.fatal')
+    @mock.patch('sqreen_sink.api.dispatch_backends.logger.fatal')
     def test_send_mail_fail(self, mock_logger):
 
         assert not MailBackend(mock.Mock()).dispatch()
