@@ -21,7 +21,9 @@ def create_app(config=None):
 
     env = os.environ.get('FLASK_ENV', default="development")
 
-    if env == "development":
+    if config is not None:
+        app.config.from_object(config)
+    elif env == "development":
         app.config.from_object(DevelopmentConfig)
     elif env == "production":
         app.config.from_object(ProductionConfig)
