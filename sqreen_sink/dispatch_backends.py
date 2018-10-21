@@ -24,6 +24,10 @@ class BaseTarget(ABC):
 
 
 class MailBackend(BaseTarget):
+    """
+    Sends the payload as a json attachment to 
+    emails specified in config
+    """
 
     def dispatch(self):
         return self._send()
@@ -53,6 +57,10 @@ class MailBackend(BaseTarget):
 
 
 class FileBackend(BaseTarget):
+    """
+    Saves the payload to file
+    TODO: Persist to a DB instead
+    """
 
     def dispatch(self):
         return self._save_to_file()

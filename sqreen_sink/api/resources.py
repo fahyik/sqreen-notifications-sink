@@ -14,13 +14,24 @@ class SqreenWebhook(Resource):
 
     def post(self):
         """
-        Returns a json object with the backends dispatched to
-        and respective result (bool) of the dispatch action
-        e.g.
-        {
-            "FileBackend": true,
-            "MailBackend": true
-        }
+        responses:
+            - 200:
+                - description:
+                    object with the dispatch result (bool) of each
+                    target backend
+                - example:
+                    {
+                        "FileBackend": true,
+                        "MailBackend": true
+                    }
+            - 400:
+                - description:
+                    invalid webhook signature
+                - example:
+                    {
+                        "error": "BadRequest: Invalid signature",
+                        "status_code": 400
+                    }
         """
         self._verify_signature()
 
@@ -35,6 +46,7 @@ class SqreenWebhook(Resource):
         result = {}
 
         for backend in [FileBackend, MailBackend]:
+        # TODO: Crete more elegant way to register dispatch targets
             result[backend.__name__] = backend(request).dispatch()
 
         return result

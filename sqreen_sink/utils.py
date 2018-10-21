@@ -5,6 +5,9 @@ from flask import current_app
 
 
 def check_signature(request_signature, request_body):
+    """
+    see: https://docs.sqreen.io/integrations/webhooks/#signature
+    """
 
     secret_key = current_app.config['SQREEN_WEBHOOK_SECRET']
     secret_key = secret_key.encode('utf-8')
