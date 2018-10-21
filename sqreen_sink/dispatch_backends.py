@@ -90,3 +90,30 @@ class FileBackend(BaseTarget):
                     sort_keys=True
                 )
             )
+
+
+class LogBackend(BaseTarget):
+    """
+    Logs the payload onto the console
+    """
+
+    def dispatch(self):
+        return self._log_to_console()
+
+    def _log_to_console(self):
+
+        try:
+            logger.info(
+                json.dumps(
+                        self.request.get_json(),
+                        indent=4,
+                        sort_keys=True
+                    )
+            )
+
+        except Exception as e:
+
+            logger.fatal("Log dispatch failed", exc_info=True)
+            return False
+
+        return True

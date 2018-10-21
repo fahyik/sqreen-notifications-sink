@@ -3,7 +3,7 @@ import logging
 from flask import request, jsonify
 from flask_restful import Resource
 
-from ..dispatch_backends import FileBackend, MailBackend
+from ..dispatch_backends import FileBackend, LogBackend, MailBackend
 from ..exceptions import BadRequest
 from ..utils import check_signature
 
@@ -45,8 +45,8 @@ class SqreenWebhook(Resource):
 
         result = {}
 
-        for backend in [FileBackend, MailBackend]:
         # TODO: Crete more elegant way to register dispatch targets
+        for backend in [LogBackend, FileBackend, MailBackend]:
             result[backend.__name__] = backend(request).dispatch()
 
         return result
