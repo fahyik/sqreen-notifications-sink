@@ -3,31 +3,32 @@ import os
 
 class BaseConfig(object):
 
-    # FLASK CONFIG
-
     # FLASK MAIL
     MAIL_SERVER = os.environ.get('MAIL_SERVER', default='smtp.gmail.com')
     MAIL_PORT = 465
     MAIL_USE_SSL = True
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SERVER', default="do_not_reply@sqreen_sink.com")
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME', default='fahyik.sqreen@gmail.com')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', default='password')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
     # SQREEN
-    SQREEN_WEBHOOK_SECRET = os.environ.get('SQREEN_WEBHOOK_SECRET', default='1234')
+    SQREEN_WEBHOOK_SECRET = os.environ.get('SQREEN_WEBHOOK_SECRET', default='9ao[fUtt2/Z9Y6oekQggZhpaKggKtZzN')
 
 
 class TestingConfig(BaseConfig):
     TESTING = True
+    DEBUG = True
 
 
 class DevelopmentConfig(BaseConfig):
 
-    pass
+    DEBUG = True
 
 
 class ProductionConfig(BaseConfig):
-    # This needs to be set in order to trigger the error handlers
+
+    DEBUG = False
+    # This needs to be set in order to trigger the error handlers when running
+    # on gunicorn
     PROPAGATE_EXCEPTIONS = True
 
 
