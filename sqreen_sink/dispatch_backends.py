@@ -6,6 +6,7 @@ import json
 import os
 import pytz
 
+from flask import current_app
 from flask_mail import Message
 
 from . import mail
@@ -23,39 +24,6 @@ class BaseTarget(ABC):
         pass
 
 
-class MailBackend(BaseTarget):
-    """
-    Sends the payload as a json attachment to 
-    emails specified in config
-    """
-
-    def dispatch(self):
-        return self._send()
-
-    def _send(self):
-
-        try:
-            timestamp = pytz.UTC.localize(datetime.datetime.utcnow().replace(microsecond=0))
-
-            self._send_mail(timestamp)
-
-            return True
-
-        except Exception as e:
-
-            logger.fatal("Email dispatch failed", exc_info=True)
-            return False
-
-    def _send_mail(self, timestamp):
-
-        msg = Message(
-            f"[SQREEN] Notifications {timestamp}",
-            recipients=['fahyik.sqreen@gmail.com']
-        )
-        msg.attach(f'notifications-{timestamp}.json', 'application/json', self.request.get_data())
-        mail.send(msg)
-
-
 class FileBackend(BaseTarget):
     """
     Saves the payload to file
@@ -68,10 +36,11 @@ class FileBackend(BaseTarget):
     def _save_to_file(self):
 
         try:
-            output_path = os.path.abspath('sqreen_sink/notifications_filestore')
+            folder = os.path.abspath('sqreen_sink/notifications_filestore')
             timestamp = pytz.UTC.localize(datetime.datetime.utcnow())
+            output_path = f'{folder}/notifications-{timestamp}.json'
 
-            self._write_to_file(output_path, timestamp)
+            self._write_to_file(output_path)
 
             return True
 
@@ -80,9 +49,9 @@ class FileBackend(BaseTarget):
             logger.fatal("File dispatch failed", exc_info=True)
             return False
 
-    def _write_to_file(self, output_path, timestamp):
+    def _write_to_file(self, output_path):
 
-        with open(f'{output_path}/notifications-{timestamp}.json', 'w') as file:
+        with open(output_path, 'w') as file:
             file.write(
                 json.dumps(
                     self.request.get_json(),
@@ -117,3 +86,38 @@ class LogBackend(BaseTarget):
             return False
 
         return True
+
+
+class MailBackend(BaseTarget):
+    """
+    Sends the payload as a json attachment to
+    emails specified in config
+    """
+
+    def dispatch(self):
+        return self._send()
+
+    def _send(self):
+
+        try:
+            timestamp = pytz.UTC.localize(datetime.datetime.utcnow().replace(microsecond=0))
+
+            self._send_mail(timestamp)
+
+            return True
+
+        except Exception as e:
+
+            logger.fatal("Email dispatch failed", exc_info=True)
+            return False
+
+    def _send_mail(self, timestamp):
+
+        recipients = current_app.config['DISPATCH_MAIL_RECIPIENTS']
+
+        msg = Message(
+            f"[SQREEN] Notifications {timestamp}",
+            recipients=recipients
+        )
+        msg.attach(f'notifications-{timestamp}.json', 'application/json', self.request.get_data())
+        mail.send(msg)

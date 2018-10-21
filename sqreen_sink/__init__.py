@@ -13,7 +13,7 @@ __version__ = "0.0.1"
 mail = Mail()
 
 
-def create_app(config_filename=None):
+def create_app(config=None):
 
     # INIT
     # ------------------------------------------------------

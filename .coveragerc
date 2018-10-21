@@ -1,0 +1,4 @@
+[run]
+include = sqreen_sink/**
+omit = *tests*
+plugins =
